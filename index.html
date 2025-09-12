@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOGO Shopping</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">YAY! It's BOGO</div>
+        </div>
+
+        <div class="pricing-options" id="pricing-options">
+        </div>
+
+        <!-- Template for option cards -->
+        <template id="option-card-template">
+            <div class="option" data-option="">
+                <div class="popular-badge" style="display: none;"><span>MOST POPULAR</span></div>
+                <div class="option-content ">
+                        <div class="option-unit-discount">
+                           <input type="radio" name="pricing">
+                             <div class="unit-info-caption">
+                            <div class="unit-info">
+                                <span class="unit-text"></span>
+                                <span class="discount"></span>
+                             </div>
+                             <div class="standard-price" style="display: none;"></div>
+                         </div>
+                       </div>
+
+                    <div class="price-info">
+                        <span class="current-price"></span>
+                        <span class="original-price"></span>
+                    </div>
+                </div>
+
+                <div class="size-color-section" style="display: none;">
+                    <div class="section-labels">
+                        <div class="label-group">
+                            <label>Size</label>
+                        </div>
+                        <div class="label-group">
+                            <label>Colour</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="footer">
+            <div class="free-delivery">Free Delivery</div>
+            <div class="total">Total : $18.00 USD</div>
+        </div>
+
+        <button class="add-to-cart">Add to Cart</button>
+        
+        <div class="powered-by">@ Powered by Pumper</div>
+    </div>
+    
+    <script>
+        const cardData = [
+            {
+                id: 1,
+                units: 1,
+                discount: "10% Off",
+                currentPrice: "$10.00 USD",
+                originalPrice: "$24.00 USD",
+                showStandardPrice: true,
+                isPopular: false,
+                isChecked: false
+            },
+            {
+                id: 2,
+                units: 2,
+                discount: "20% Off",
+                currentPrice: "$18.00 USD",
+                originalPrice: "$24.00 USD",
+                showStandardPrice: false,
+                isPopular: true,
+                isChecked: true
+            },
+            {
+                id: 3,
+                units: 3,
+                discount: "30% Off",
+                currentPrice: "$24.00 USD",
+                originalPrice: "$24.00 USD",
+                showStandardPrice: false,
+                isPopular: false,
+                isChecked: false
+            }
+        ];
+
+        const sizeOptions = ['S', 'M', 'L', 'XL'];
+        const colorOptions = ['Black', 'White', 'Blue'];
+
+        function createCard(data) {
+            const template = document.getElementById('option-card-template');
+            const cardClone = template.content.cloneNode(true);
+            
+            const option = cardClone.querySelector('.option');
+            const radio = cardClone.querySelector('input[type="radio"]');
+            const popularBadge = cardClone.querySelector('.popular-badge');
+            const unitText = cardClone.querySelector('.unit-text');
+            const discount = cardClone.querySelector('.discount');
+            const currentPrice = cardClone.querySelector('.current-price');
+            const originalPrice = cardClone.querySelector('.original-price');
+            const standardPrice = cardClone.querySelector('.standard-price');
+            const sizeColorSection = cardClone.querySelector('.size-color-section');
+
+            // Set card attributes
+            option.setAttribute('data-option', data.id);
+            if (data.isPopular) {
+                option.classList.add('popular');
+                popularBadge.style.display = 'flex';
+            }
+
+            // Set radio button
+            radio.id = `option${data.id}`;
+            radio.value = data.id;
+            radio.checked = data.isChecked;
+
+            // Set content
+            unitText.textContent = `${data.units} Unit`;
+            discount.textContent = data.discount;
+            currentPrice.textContent = data.currentPrice;
+            originalPrice.textContent = data.originalPrice;
+
+            if (data.showStandardPrice) {
+                standardPrice.textContent = 'Standard Price';
+                standardPrice.style.display = 'block';
+            }
+
+            // Create size/color rows (2 for each card)
+            for (let i = 1; i <= 2; i++) {
+                const row = document.createElement('div');
+                row.className = 'size-color-row';
+                
+                const sizeSection = document.createElement('div');
+                sizeSection.className = 'size-section';
+                
+                const itemNumber = document.createElement('span');
+                itemNumber.className = 'item-number';
+                itemNumber.textContent = `#${i}`;
+                
+                const sizeSelect = document.createElement('select');
+                sizeSelect.className = 'size-select';
+                sizeOptions.forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size;
+                    option.textContent = size;
+                    sizeSelect.appendChild(option);
+                });
+                
+                sizeSection.appendChild(itemNumber);
+                sizeSection.appendChild(sizeSelect);
+                
+                const colorSection = document.createElement('div');
+                colorSection.className = 'color-section';
+                
+                const colorSelect = document.createElement('select');
+                colorSelect.className = 'color-select';
+                
+                if (i === 1 && data.units >= 2) {
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = 'Black';
+                    colorSelect.appendChild(defaultOption);
+                } else {
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = i === 1 ? 'Black' : 'Colour';
+                    colorSelect.appendChild(defaultOption);
+                }
+                
+                colorOptions.forEach(color => {
+                    if (!(i === 1 && color === 'Black')) {
+                        const option = document.createElement('option');
+                        option.value = color;
+                        option.textContent = color;
+                        colorSelect.appendChild(option);
+                    }
+                });
+                
+                colorSection.appendChild(colorSelect);
+                row.appendChild(sizeSection);
+                row.appendChild(colorSection);
+                sizeColorSection.appendChild(row);
+            }
+
+            // Show size/color section if checked
+            if (data.isChecked) {
+                sizeColorSection.style.display = 'block';
+            }
+
+            return cardClone;
+        }
+
+
+        function toggleBoxExpansion(clickedOption) {
+            const allOptions = document.querySelectorAll('.option');
+            const isCurrentlyExpanded = clickedOption.classList.contains('expanded');
+            
+            // First, collapse all boxes
+            allOptions.forEach(option => {
+                const sizeColorSection = option.querySelector('.size-color-section');
+                option.classList.remove('expanded');
+                sizeColorSection.style.display = 'none';
+            });
+            
+            // If the clicked box wasn't expanded, expand it
+            if (!isCurrentlyExpanded) {
+                const sizeColorSection = clickedOption.querySelector('.size-color-section');
+                clickedOption.classList.add('expanded');
+                sizeColorSection.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const pricingOptions = document.getElementById('pricing-options');
+            
+            // Generate cards from template
+            cardData.forEach(data => {
+                const card = createCard(data);
+                pricingOptions.appendChild(card);
+            });
+
+            // Add event listeners for radio buttons (only for radio selection)
+            const radioButtons = document.querySelectorAll('input[name="pricing"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function(e) {
+                    e.stopPropagation(); // Prevent box expansion when radio is clicked
+                });
+            });
+
+            // Add event listeners for box expansion (independent of radio buttons)
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    // Don't trigger box expansion if radio button was clicked
+                    if (e.target.type === 'radio') {
+                        return;
+                    }
+                    
+                    // Don't trigger box expansion if dropdown was clicked
+                    if (e.target.classList.contains('size-select') || e.target.classList.contains('color-select')) {
+                        return;
+                    }
+                    
+                    // Toggle expansion state for this box
+                    toggleBoxExpansion(option);
+                });
+            });
+
+            // Add event listeners to prevent dropdowns from closing the box
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('size-select') || e.target.classList.contains('color-select')) {
+                    e.stopPropagation();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
