@@ -48,18 +48,52 @@ shopping/
 4. Use dropdowns to select size and color variants
 5. Click "Add to Cart" to complete selection
 
-## Customization
+## Architecture
 
-### Colors
-- Primary pink: `#FF6B82`
-- Light pink background: `#FFF9FA`
-- Border gray: `#e9ecef`
-- Text colors defined in CSS variables
+### CSS Design System
+Built with a comprehensive CSS custom properties system for maximum maintainability and consistency:
 
-### Layout
-- Container width: `462px`
-- Responsive padding and margins
-- Inter font family for clean typography
+**Responsive Design**
+- Uses `rem`, `em`, `vw` units instead of fixed `px` values
+- Container width: `min(90vw, 28.875rem)` for responsive scaling
+- All spacing uses consistent scale: 0.25rem, 0.5rem, 0.75rem, 1rem, etc.
+
+**Color System**
+```css
+/* Brand Colors */
+--primary-color: #FF6B82
+--primary-light: #FFF9FA
+--hover-color: #ff5252
+
+/* Semantic Colors */
+--text-primary, --text-secondary, --text-muted
+--border-color, --border-light, --border-lines
+--background-light, --white, --black
+```
+
+**Typography Scale**
+```css
+--font-size-large: 1.25rem    /* 20px */
+--font-size-medium: 0.875rem  /* 14px */
+--font-size-small: 0.75rem    /* 12px */
+--font-size-tiny: 0.625rem    /* 10px */
+```
+
+**Layout System**
+```css
+--spacing-xs: 0.25rem   /* 4px */
+--spacing-sm: 0.5rem    /* 8px */
+--spacing-md: 0.75rem   /* 12px */
+--spacing-lg: 1rem      /* 16px */
+--spacing-xl: 1.5rem    /* 24px */
+```
+
+### Benefits
+- **Consistent**: All values derived from systematic scale
+- **Maintainable**: Change design tokens in one place
+- **Responsive**: Scales naturally across devices
+- **Accessible**: Uses relative units that respect user preferences
+- **Themeable**: Easy to create variants by modifying CSS variables
 
 ## Browser Compatibility
 
