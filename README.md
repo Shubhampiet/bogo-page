@@ -1,3 +1,7 @@
+<img width="580" height="649" alt="image" src="https://github.com/user-attachments/assets/b164cee1-192f-417a-816a-50ed2fcd3201" />
+<img width="580" height="649" alt="image" src="https://github.com/user-attachments/assets/6c279c1a-c276-4192-9ab1-b68af36ef5bb" />
+
+
 # BOGO Shopping Interface
 
 A responsive shopping interface for "Buy One Get One" (BOGO) offers with independent radio button and box selection functionality.
